@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {BrowserRouter as Router, Route, Link, withRouter} from 'react-router-dom';
 import './Homepage.scss';
 
 class Homepage extends Component {
@@ -27,33 +28,36 @@ class Homepage extends Component {
                         </div>
                     </div>
                     <div className="col-5 d-flex justify-content-center">
-                        <div className="card card-item border-0 bg-transparent">
-                            <img
-                                className="card-image"
-                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Moore_Machine.svg/330px-Moore_Machine.svg.png"
-                                alt="Moore machine"/>
-                            <div className="card-info">
-                                <h2>Moore machine</h2>
-                                <div className="meta">271</div>
-                                <div className="brand">Description</div>
+                        <Link to={'/moore'} className="link-decoration">
+                            <div className="card card-item border-0 bg-transparent">
+                                <img
+                                    className="card-image"
+                                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Moore_Machine.svg/330px-Moore_Machine.svg.png"
+                                    alt="Moore machine"/>
+                                <div className="card-info">
+                                    <h2 className="text-dark">Moore machine</h2>
+                                    <div className="meta">271</div>
+                                    <div className="brand">Description</div>
+                                </div>
                             </div>
-                        </div>
+                        </Link>
                     </div>
                     <div className="col-5 d-flex justify-content-center">
-                        <div className="card card-item border-0 bg-transparent">
-                            <img
-                                className="card-image"
-                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/CPT-FSM-Mealy-01.svg/350px-CPT-FSM-Mealy-01.svg.png"
-                                alt="Mealy machine"/>
-                            <div className="card-info">
-                                <h2>Mealy machine</h2>
-                                <div className="meta">271</div>
-                                <div className="brand">Description</div>
+                        <Link to={'/mealy'} className="link-decoration">
+                            <div className="card card-item border-0 bg-transparent">
+                                <img
+                                    className="card-image"
+                                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/CPT-FSM-Mealy-01.svg/350px-CPT-FSM-Mealy-01.svg.png"
+                                    alt="Mealy machine"/>
+                                <div className="card-info">
+                                    <h2 className="text-dark">Mealy machine</h2>
+                                    <div className="meta">271</div>
+                                    <div className="brand">Description</div>
+                                </div>
                             </div>
-                        </div>
+                        </Link>
                     </div>
                 </div>
-
             </div>
         );
     }

@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
-import Header from '../Commons/Header';
-import Footer from '../Commons/Footer';
+// import Header from '../Commons/Header';
+// import Footer from '../Commons/Footer';
 import Homepage from '../Homepage/Homepage';
+import Moore from '../MachinePage/Moore'
+import Mealy from '../MachinePage/Mealy'
 import './App.scss';
 
 // Components
@@ -15,11 +17,13 @@ class App extends Component {
 
         return (
 
-            <div className="app">
+            <div className="app py-0">
                 <Router>
                     <Root>
                         <Switch>
                             <Route path={'/home'} component={Homepage}/>
+                            <Route path={'/moore'} component={Moore}/>
+                            <Route path={'/mealy'} component={Mealy}/>
                         </Switch>
                     </Root>
                 </Router>

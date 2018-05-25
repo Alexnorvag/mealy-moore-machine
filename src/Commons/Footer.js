@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './Footer.scss';
-import logo from '../res/logo/logo.png'
+import logo from '../res/logo/logo.png';
+import {BrowserRouter as Router, Route, Link, withRouter} from 'react-router-dom';
 
 class Footer extends Component {
     constructor() {
@@ -16,7 +17,9 @@ class Footer extends Component {
                 <div className="row m-0">
                     <div className="logo col-4 my-auto">
                         <div className="py-2">
-                            <img src={logo} alt="logo"/>
+                            <Link to={'/home'}>
+                                <img src={logo} alt="logo"/>
+                            </Link>
                         </div>
                     </div>
                     <div className="copyright col-4 my-auto">
