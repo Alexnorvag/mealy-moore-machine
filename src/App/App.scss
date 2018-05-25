@@ -1,0 +1,57 @@
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 100%;
+}
+
+html,
+body {
+    min-height: 100%;
+    min-height: 100vh;
+}
+
+body { 
+    font: 16px 'Inconsolata';
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    background: 
+    linear-gradient(
+       rgba(white, 0.8), 
+       rgba(white, 0.8) 
+    ),
+    url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/wov.png);
+}
+
+.app {
+    max-width: 100%;
+    width: 100%;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    min-height: 100%;
+    min-height: 100vh;
+    margin: 0 auto;
+    // >footer {
+    //     width: 100%;
+    //     padding: 1rem;
+    //     margin: .5rem 1rem;
+    //     text-align: center;
+    //     transition: 200ms;
+    //     &:hover {
+    //         box-shadow: 0 0 2rem gray;
+    //     }
+    // }
+
+    // >footer {
+    //     background: white;
+    // }
+}
