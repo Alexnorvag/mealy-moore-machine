@@ -15,16 +15,18 @@ class App extends Component {
 
         return (
 
-            // <Router>
-            //     <Root>
-            //         <Switch>
-            //             <Route path={'/home'} component={Homepage}/>
-            //         </Switch>
-            //     </Root>
-            // </Router>
+            <div className="app">
+                <Router>
+                    <Root>
+                        <Switch>
+                            <Route path={'/home'} component={Homepage}/>
+                        </Switch>
+                    </Root>
+                </Router>
+            </div>
 
-        <div className="app py-0">     <Header title='Home'/>     <Homepage/>
-        <Footer/> {/* <Footer title={footer}/> */} </div>
+        // <div className="app py-0">     <Header title='Home'/>     <Homepage/>
+        // <Footer/> {/* <Footer title={footer}/> */} </div>
         );
     }
 }
