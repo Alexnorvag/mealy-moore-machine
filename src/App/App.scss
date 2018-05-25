@@ -14,18 +14,13 @@ body {
     min-height: 100vh;
 }
 
-body { 
+body {
     font: 16px 'Inconsolata';
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     margin: 0;
-    background: 
-    linear-gradient(
-       rgba(white, 0.8), 
-       rgba(white, 0.8) 
-    ),
-    url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/wov.png);
+    background: linear-gradient( rgba(white, 0.8), rgba(white, 0.8)), url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/wov.png);
 }
 
 .app {
@@ -39,19 +34,18 @@ body {
     height: 100%;
     min-height: 100%;
     min-height: 100vh;
-    margin: 0 auto;
-    // >footer {
-    //     width: 100%;
-    //     padding: 1rem;
-    //     margin: .5rem 1rem;
-    //     text-align: center;
-    //     transition: 200ms;
-    //     &:hover {
-    //         box-shadow: 0 0 2rem gray;
-    //     }
-    // }
-
-    // >footer {
+    margin: 0 auto; // >footer,
+    >main {
+        flex: 1 1 auto;
+        width: 100%;
+        padding: .5rem;
+        margin: 0 auto;
+        text-align: center;
+        transition: 200ms;
+        // &:hover {
+        //     box-shadow: 0 0 2rem gray;
+        // }
+    } // >footer {
     //     background: white;
     // }
 }

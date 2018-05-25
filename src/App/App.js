@@ -20,11 +20,13 @@ class App extends Component {
             <div className="app py-0">
                 <Router>
                     <Root>
-                        <Switch>
-                            <Route path={'/home'} component={Homepage}/>
-                            <Route path={'/moore'} component={Moore}/>
-                            <Route path={'/mealy'} component={Mealy}/>
-                        </Switch>
+                        <main>
+                            <Switch>
+                                <Route path={'/home'} component={Homepage}/>
+                                <Route path={'/moore'} component={Moore}/>
+                                <Route path={'/mealy'} component={Mealy}/>
+                            </Switch>
+                        </main>
                     </Root>
                 </Router>
             </div>

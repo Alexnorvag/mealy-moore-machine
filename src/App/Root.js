@@ -5,7 +5,8 @@ import Footer from '../Commons/Footer';
 
 export const Root = props => (
     <React.Fragment>
-        <Header/> {props.children}
+        <Header/>
+        {props.children}
         <Footer/>
     </React.Fragment>
 );

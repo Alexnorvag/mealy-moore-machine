@@ -10,7 +10,7 @@ class Mealy extends Component {
     render() {
 
         return (
-            <div>Mealy</div>
+            <div className="mealy-machine">Mealy</div>
         );
     }
 }

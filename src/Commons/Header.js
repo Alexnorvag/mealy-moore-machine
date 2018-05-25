@@ -25,7 +25,7 @@ class Header extends Component {
         return (
             <div className="header">
                 <nav className="navbar navbar-light bg-light">
-                    <a className="navbar-brand text-uppercase" href="/home">{this.props.title}</a>
+                    <a className="navbar-brand text-uppercase" href="/home">Home</a>
                     <div className="">{(currentTime)}</div>
 
                     <div className="btn-group">
