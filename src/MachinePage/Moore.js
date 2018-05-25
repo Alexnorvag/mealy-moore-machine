@@ -5,9 +5,9 @@ class Moore extends Component {
         super();
 
         this.state = {
-            z: 0,
-            w: 0,
-            a: 0
+            inputSignals: 1,
+            outputSignals: 1,
+            stateSet: 1
         };
 
         this.handleChange = this
@@ -27,37 +27,40 @@ class Moore extends Component {
             <div className="moore-machine">
                 <div className="row mx-0">
                     <div className="col-4">
-                        <label htmlFor="z">{this.state.z}</label>
+                        <label htmlFor="stateSet">{"State set: " + this.state.stateSet + ' (A)'}</label>
                         <input
                             type="range"
                             className="custom-range"
-                            value={this.state.z}
-                            min={0}
+                            value={this.state.stateSet}
+                            min={1}
                             max={10}
                             onInput={this.handleChange}
-                            id="z"/>
+                            onChange={this.handleChange}
+                            id="stateSet"/>
                     </div>
                     <div className="col-4">
-                        <label htmlFor="w">{this.state.w}</label>
+                        <label htmlFor="inputSignals">{"Input signals: " + this.state.inputSignals + ' (Z)'}</label>
                         <input
                             type="range"
                             className="custom-range"
-                            value={this.state.w}
-                            min={0}
+                            value={this.state.inputSignals}
+                            min={1}
                             max={10}
                             onInput={this.handleChange}
-                            id="w"/>
+                            onChange={this.handleChange}
+                            id="inputSignals"/>
                     </div>
                     <div className="col-4">
-                        <label htmlFor="a">{this.state.a}</label>
+                        <label htmlFor="outputSignals">{"Output signals: " + this.state.outputSignals + ' (W)'}</label>
                         <input
                             type="range"
                             className="custom-range"
-                            value={this.state.a}
-                            min={0}
+                            value={this.state.outputSignals}
+                            min={1}
                             max={10}
                             onInput={this.handleChange}
-                            id="a"/>
+                            onChange={this.handleChange}
+                            id="outputSignals"/>
                     </div>
                 </div>
             </div>

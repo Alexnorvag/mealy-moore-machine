@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Route, Link, withRouter} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Link, withRouter} from 'react-router-dom';// eslint-disable-line no-unused-vars
 import './Homepage.scss';
 
 class Homepage extends Component {

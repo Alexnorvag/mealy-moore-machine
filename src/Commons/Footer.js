@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
 import './Footer.scss';
 import logo from '../res/logo/logo.png';
-import {BrowserRouter as Router, Route, Link, withRouter} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Link, withRouter} from 'react-router-dom';// eslint-disable-line no-unused-vars
 
 class Footer extends Component {
     constructor() {
         super();
 
-        this.state = {};
+        this.state = {
+            
+        };
     }
 
     render() {

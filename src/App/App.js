@@ -25,6 +25,7 @@ class App extends Component {
                                 <Route path={'/home'} component={Homepage}/>
                                 <Route path={'/moore'} component={Moore}/>
                                 <Route path={'/mealy'} component={Mealy}/>
+                                <Route exact path={'/'} component={() => <Redirect to={'/home'} />} />
                             </Switch>
                         </main>
                     </Root>
