@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import ReactTable from "react-table";
-import Select from 'react-select';
 import update from 'immutability-helper';
 
-import 'react-select/dist/react-select.css';
 import './Moore.scss'
 
 class Moore extends Component {
@@ -16,7 +14,7 @@ class Moore extends Component {
             outputSignals: 1,
             data: [
                 {
-                    inSignal: 'Z1'
+                    inSignal: 'z1'
                 }
             ],
             columns: [
@@ -26,51 +24,103 @@ class Moore extends Component {
                     // Cell: row => 'z/a'
                     minWidth: 40
                 }, {
-                    Header: 'A1',
+                    Header: 'a1',
                     accessor: 'a1',
                     minWidth: 40
                 }
-            ]
+            ],
+            test: []
         };
 
         this.handleChange = this
             .handleChange
+            .bind(this);
+        this.handleChangeSelect = this
+            .handleChangeSelect
             .bind(this);
     }
 
     handleChange(event) {
         this.setState({
             [event.target.id]: event.target.value
+        }, () => this.generateData());
+    }
+
+    handleChangeSelect(event, i, j) {
+        this.state.test[i][j] = event.target.value;
+        // this.setState({
+        //     test: {
+        //         ...this.state.test,
+        //         [i]: {
+        //             [j]: event.target.value
+        //         }
+        //     }
+        // });
+        this.generateTable();
+    }
+
+    generateData() {
+        var data = [];
+
+        for (let i = 0; i < this.state.inputSignals; i++) {
+            data[i] = [];
+            for (let j = 0; j < this.state.stateSet; j++) {
+                data[i][j] = "selectState00";
+            }
+        }
+        this.setState({
+            test: data
         }, () => this.generateTable());
     }
 
     generateTable() {
-        const testData = [];
+        var testData = [];
         const testCol = [];
-        testCol.push({
-            Header: 'Z/A', accessor: 'inSignal', minWidth: 40
-            // Cell: row => 'z/a'
-        });
+        var selectStateArray = [];
+
+        //первая колонка
+        testCol.push({Header: 'Z/A', accessor: 'inSignal', minWidth: 40});
 
         for (let i = 0; i < this.state.inputSignals; i++) {
-            testData.push({
-                inSignal: 'Z' + (i + 1)
-            });
-            var statesA = [];
+            var optionListA = this.createOpt(i, 'a');
+            var optionListW = this.createOpt(i, 'w');
+            selectStateArray[i] = []
+
+            //остальные данные
             for (let j = 0; j < this.state.stateSet; j++) {
-                statesA.push('a' + (j + 1));
+                selectStateArray[i][j] = (
+                    <div>
+                        <select
+                            name={"selectState" + i + j}
+                            value={this.state.test[i][j]}
+                            className="select-style"
+                            onChange={(e) => this.handleChangeSelect(e, i, j)}>
+                            {optionListA}
+                        </select>
+                        <select
+                            name={"selectState" + i + j}
+                            value={this.state.test[i][j]}
+                            className="select-style"
+                            onChange={(e) => this.handleChangeSelect(e, i, j)}>
+                            {optionListW}
+                        </select>
+                    </div>
+                );
             }
-            testData[i] = update(testData[i], {$merge: [statesA]});
+
+            //данные для первой колонки
+            testData.push({
+                inSignal: 'z' + (i + 1),
+                arr: selectStateArray[i]
+            });
         }
 
-        console.log("AFAFA: ", testData[0][0][2]);
-
+        //добавление названий для каждой колонки
         for (let i = 0; i < this.state.stateSet; i++) {
             testCol.push({
-                Header: 'A' + (i + 1),
-                // accessor: 'a' + (i + 1),
-                Cell: row => this.editHandler(row),
-                // Cell: row => testData[0][0][i] + ' / z',
+                Header: 'a' + (i + 1),
+                id: i,
+                accessor: 'arr.' + i,
                 minWidth: 40
             });
         }
@@ -78,42 +128,24 @@ class Moore extends Component {
         this.setState({
             data: update(this.state.data, {$set: testData}),
             columns: update(this.state.columns, {$set: testCol})
+        }, () => {
+            console.log("Data: ", this.state.data);
+            console.log("Col: ", this.state.columns);
+            console.log("VALUES: ", this.state.test);
         })
-        console.log("Data", testData);
-        // console.log("STATE DATA", this.state.data);
-        console.log("Col: ", testCol);
     }
 
-    editHandler(cellInfo) {
-        return (
-            <div>
-                <select name="select">
-                    <option value="value1">Значение 1</option>
-                    <option value="value2" selected>Значение 2</option>
-                    <option value="value3">Значение 3</option>
-                </select>
-                <select>
-                    <option>w1</option>
-                    <option>w2</option>
-                </select>
-            </div>
-        //   <div className="d-flex justify-content-center">     <a       style={{
-        // cursor: 'pointer'       }}       onClick={e => {         if
-        // (this.state.selectedArray.trigger) {           console.log('true. trigger',
-        // this.state.selectedArray.trigger);           console.log('FULL ARR: ',
-        // this.state.selectedArray);         }         this.setState({           modal:
-        // update(this.state.modal, {             $set: !this.state.modal           }),
-        // selectedArray: update(this.state.selectedArray, {             $set:
-        // this.state.data[cellInfo.index]           }),           changeState:
-        // update(this.state.changeState, {             $set: !this.state.changeState
-        // }),           indexToChange: update(this.state.indexToChange, { $set:
-        // cellInfo.index           })         });       }}>       <i className="far
-        // fa-edit" />     </a>   </div>
-        );
+    createOpt = (rowNumber, optionName) => {
+        let options = [];
+        for (let i = 1; i <= this.state.stateSet; i++) {
+            options.push(
+                <option value={'selectState' + rowNumber + (i - 1)} key={i}>{optionName + i}</option>
+            )
+        }
+        return options;
     }
 
     render() {
-        // console.log("Data from State: ", this.state.data);
 
         return (
             <div className="moore-machine mt-3">

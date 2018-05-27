@@ -18,7 +18,7 @@ class Homepage extends Component {
                         <div className="card border-0 bg-transparent">
                             <div className="card-body">
                                 <h2 className="card-title">Moore and Mealy Machines</h2>
-                                <p className="card-text font-italic">Description for both machines.
+                                <p className="card-text font-italic">Description for both machines
                                 </p>
                                 <p className="card-text text-monospace">Lorem ipsum dolor sit amet consectetur
                                     adipisicing elit. Similique possimus aliquam nulla eos, optio nisi, impedit
