@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ReactTable from "react-table";
 import update from 'immutability-helper';
+import {Table, Button} from 'reactstrap';
 
 import './Mealy.scss'
 
@@ -29,7 +30,8 @@ class Mealy extends Component {
                     minWidth: 40
                 }
             ],
-            test: []
+            statesArray: [],
+            outputsArray: []
         };
 
         this.handleChange = this
@@ -47,29 +49,32 @@ class Mealy extends Component {
     }
 
     handleChangeSelect(event, i, j) {
-        this.state.test[i][j] = event.target.value;
-        // this.setState({
-        //     test: {
-        //         ...this.state.test,
-        //         [i]: {
-        //             [j]: event.target.value
-        //         }
-        //     }
-        // });
-        this.generateTable();
+        if (event.target.name.indexOf('selectState') !== -1) {
+            // eslint-disable-next-line
+            this.state.statesArray[i][j] = event.target.value;
+            this.generateTable();
+        } else {
+            // eslint-disable-next-line
+            this.state.outputsArray[i][j] = event.target.value;
+            this.generateTable();
+        }
     }
 
     generateData() {
-        var data = [];
+        var dataStates = [];
+        var dataOutputs = [];
 
         for (let i = 0; i < this.state.inputSignals; i++) {
-            data[i] = [];
+            dataStates[i] = [];
+            dataOutputs[i] = [];
             for (let j = 0; j < this.state.stateSet; j++) {
-                data[i][j] = "selectState00";
+                dataStates[i][j] = "selectState00";
+                dataOutputs[i][j] = "selectOutput00";
             }
         }
         this.setState({
-            test: data
+            statesArray: dataStates,
+            outputsArray: dataOutputs
         }, () => this.generateTable());
     }
 
@@ -82,8 +87,8 @@ class Mealy extends Component {
         testCol.push({Header: 'Z/A', accessor: 'inSignal', minWidth: 40});
 
         for (let i = 0; i < this.state.inputSignals; i++) {
-            var optionListA = this.createOpt(i, 'a');
-            var optionListW = this.createOpt(i, 'w');
+            var optionListA = this.createOptions(i, 'a');
+            var optionListW = this.createOptions(i, 'w');
             selectStateArray[i] = []
 
             //остальные данные
@@ -92,14 +97,14 @@ class Mealy extends Component {
                     <div>
                         <select
                             name={"selectState" + i + j}
-                            value={this.state.test[i][j]}
+                            value={this.state.statesArray[i][j]}
                             className="select-style"
                             onChange={(e) => this.handleChangeSelect(e, i, j)}>
                             {optionListA}
                         </select>
                         <select
-                            name={"selectState" + i + j}
-                            value={this.state.test[i][j]}
+                            name={"selectOutput" + i + j}
+                            value={this.state.outputsArray[i][j]}
                             className="select-style"
                             onChange={(e) => this.handleChangeSelect(e, i, j)}>
                             {optionListW}
@@ -131,16 +136,27 @@ class Mealy extends Component {
         }, () => {
             console.log("Data: ", this.state.data);
             console.log("Col: ", this.state.columns);
-            console.log("VALUES: ", this.state.test);
+            console.log("States: ", this.state.statesArray);
+            console.log("Outputs: ", this.state.outputsArray);
         })
     }
 
-    createOpt = (rowNumber, optionName) => {
+    createOptions = (rowNumber, optionName) => {
         let options = [];
-        for (let i = 1; i <= this.state.stateSet; i++) {
-            options.push(
-                <option value={'selectState' + rowNumber + (i - 1)} key={i}>{optionName + i}</option>
-            )
+        if (optionName === 'a') {
+            for (let i = 1; i <= this.state.stateSet; i++) {
+                options.push(
+                    <option value={'selectState' + rowNumber + (i - 1)} key={i}>{optionName + i}
+                    </option>
+                )
+            }
+        } else {
+            for (let i = 1; i <= this.state.outputSignals; i++) {
+                options.push(
+                    <option value={'selectOutput' + rowNumber + (i - 1)} key={i}>{optionName + i}
+                    </option>
+                )
+            }
         }
         return options;
     }
@@ -189,6 +205,66 @@ class Mealy extends Component {
                             columns={this.state.columns}
                             pageSize={this.state.data.length}
                             showPagination={false}/>
+                    </div>
+                    <div className="col-12 mt-3">
+                        <Button color="primary">
+                            Build
+                        </Button>
+                    </div>
+                    <div className="col-12 mt-3">
+                        <Table bordered>
+                            {/* <thead>
+                                <tr>
+                                    <th>a2</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Username</th>
+                                </tr>
+                            </thead> */}
+                            <tbody>
+                                <tr>
+                                    <td scope="row">a2</td>
+                                    <td>X</td>
+                                    {/* <td>Otto</td>
+                                    <td>@mdo</td> */}
+                                </tr>
+                                <tr>
+                                    <td scope="row">a3</td>
+                                    <td>(a2, a6)</td>
+                                    <td>X</td>
+                                    {/* <td>@mdo</td> */}
+                                </tr>
+                                <tr>
+                                    <td scope="row">a4</td>
+                                    <td>X</td>
+                                    <td>X</td>
+                                    <td>X</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">a5</td>
+                                    <td>X</td>
+                                    <td>(a2, a6), (a5, a6)</td>
+                                    <td>X</td>
+                                    <td>X</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">a6</td>
+                                    <td>X</td>
+                                    <td>(a2, a5)</td>
+                                    <td>X</td>
+                                    <td>X</td>
+                                    <td>(a2, a5)</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>a1</td>
+                                    <td>a2</td>
+                                    <td>a3</td>
+                                    <td>a4</td>
+                                    <td>a5</td>
+                                </tr>
+                            </tbody>
+                        </Table>
                     </div>
                 </div>
             </div>
