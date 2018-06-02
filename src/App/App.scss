@@ -21,6 +21,18 @@ body {
     min-height: 100vh;
     margin: 0;
     background: linear-gradient( rgba(white, 0.8), rgba(white, 0.8)), url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/wov.png);
+    ::selection {
+        background: rgba(248, 128, 69, 0.99);
+        color: #fff;
+    }
+    h2 {
+        text-rendering: optimizeLegibility;
+    }
+    h2::selection {
+        text-shadow: none;
+        -webkit-text-stroke: 1px #000;
+        background: rgb(248, 248, 250);
+    }
 }
 
 .app {
@@ -34,7 +46,7 @@ body {
     height: 100%;
     min-height: 100%;
     min-height: 100vh;
-    margin: 0 auto; // >footer,
+    margin: 0 auto;
     >main {
         flex: 1 1 auto;
         width: 100%;
@@ -42,10 +54,5 @@ body {
         margin: 0 auto;
         text-align: center;
         transition: 200ms;
-        // &:hover {
-        //     box-shadow: 0 0 2rem gray;
-        // }
-    } // >footer {
-    //     background: white;
-    // }
+    }
 }

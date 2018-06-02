@@ -3,7 +3,7 @@ import ReactTable from "react-table";
 import update from 'immutability-helper';
 import {Table, Button} from 'reactstrap';
 
-import './Mealy.scss'
+import './Mealy.scss';
 
 class Mealy extends Component {
     constructor() {
@@ -31,7 +31,8 @@ class Mealy extends Component {
                 }
             ],
             statesArray: [],
-            outputsArray: []
+            outputsArray: [],
+            counter: 0
         };
 
         this.handleChange = this
@@ -53,7 +54,7 @@ class Mealy extends Component {
             // eslint-disable-next-line
             this.state.statesArray[i][j] = event.target.value;
             this.generateTable();
-        } else {
+        } else  {
             // eslint-disable-next-line
             this.state.outputsArray[i][j] = event.target.value;
             this.generateTable();
@@ -61,6 +62,7 @@ class Mealy extends Component {
     }
 
     generateData() {
+        console.log("FORM GENERATE DATA");
         var dataStates = [];
         var dataOutputs = [];
 
@@ -158,7 +160,14 @@ class Mealy extends Component {
                 )
             }
         }
+        console.log("OPTIONS:");
         return options;
+    }
+
+    generateTriangleTable() {
+        for (let i = 1; i < this.state.stateSet; i++) {
+            console.log("Index: ", i);
+        }
     }
 
     render() {
@@ -204,12 +213,14 @@ class Mealy extends Component {
                             data={this.state.data}
                             columns={this.state.columns}
                             pageSize={this.state.data.length}
-                            showPagination={false}/>
+                            showPagination={false}
+                            />
                     </div>
                     <div className="col-12 mt-3">
                         <Button color="primary">
-                            Build
+                            add 'Build button' to pagination
                         </Button>
+                    {this.generateTriangleTable()}
                     </div>
                     <div className="col-12 mt-3">
                         <Table bordered>
