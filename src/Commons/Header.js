@@ -7,14 +7,14 @@ class Header extends Component {
         super();
 
         this.state = {
-            currentTime: new Date().toLocaleString(),
-            date: ''
+            date: '',
+            time: ''
         };
     }
 
     componentDidMount() {
         setInterval(() => {
-            var week = [
+            const week = [
                 'SUN',
                 'MON',
                 'TUE',
@@ -23,28 +23,25 @@ class Header extends Component {
                 'FRI',
                 'SAT'
             ];
-            var cd = new Date();
-            console.log("DATE: ", );
+            let currentDate = new Date();
 
             this.setState({
-                currentTime: new Date().toLocaleString(),
-                date: this.zeroPadding(cd.getFullYear(), 4) + '-' +
-                this.zeroPadding(cd.getMonth()+1, 2) + '-' + this.zeroPadding(cd.getDate(), 2)
-                + ' ' + week[cd.getDay()]
+                date: this.clearPadding(currentDate.getFullYear(), 4) + '-' + this.clearPadding(currentDate.getMonth() + 1, 2) + '-' + this.clearPadding(currentDate.getDate(), 2) + ' ' + week[currentDate.getDay()],
+                time: this.clearPadding(currentDate.getHours(), 2) + ':' + this.clearPadding(currentDate.getMinutes(), 2) + ':' + this.clearPadding(currentDate.getSeconds(), 2)
             })
         }, 1000)
     }
 
-    zeroPadding(num, digit) {
-        var zero = '';
-        for (var i = 0; i < digit; i++) {
+    clearPadding(num, digit) {
+        let zero = '';
+        for (let i = 0; i < digit; i++) {
             zero += '0';
         }
         return (zero + num).slice(-digit);
     }
 
     render() {
-        const {currentTime, date} = this.state;
+        const {date, time} = this.state;
 
         return (
             <div className="header">
@@ -56,8 +53,7 @@ class Header extends Component {
                     </div>
                     <div className="col-4 d-inline text-center">
                         <p className="date">{date}</p>
-                        <div className="mb-1">{(currentTime.substring(0, currentTime.indexOf(', ')))}</div>
-                        <div className="">{(currentTime.substring(currentTime.indexOf(', ') + 2))}</div>
+                        <p className="time">{time}</p>
                     </div>
 
                     <div className="col-4 d-flex justify-content-end">
