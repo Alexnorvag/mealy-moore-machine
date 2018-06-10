@@ -145,7 +145,7 @@ class Mealy extends Component {
         }, () => {
             // console.log("Data: ", this.state.data); console.log("Col: ",
             // this.state.columns); console.log("States: ", this.state.statesArray);
-            console.log("Outputs: ", this.state.outputsArray);
+            // console.log("Outputs: ", this.state.outputsArray);
         });
     }
 
@@ -161,6 +161,7 @@ class Mealy extends Component {
 
     equivalentCells(mainCol, compCol, data) {
         let equivPairs = [];
+        // let testTriangleData = [];
 
         for (let i = 0; i < this.state.inputSignals; i++) {
             let main = parseInt(data[i].arr[mainCol].props.children[0].props.value.substr(-1), 10) + 1;
@@ -174,9 +175,19 @@ class Mealy extends Component {
                     ? '(a' + comp + ', a' + main + ')'
                     : '(a' + main + ', a' + comp + ')';
             }
+            // else {
+            //     equivPairs[i] = 'empty';
+            //     break;
+            // }
+            // testTriangleData[i] = equivPairs;
         }
 
         equivPairs = [...new Set(equivPairs)];
+        if (equivPairs.length === 0) {
+            equivPairs.push('\u2205');
+        }
+
+        console.log("Triangle data: ", equivPairs);
 
         return equivPairs;
     }
@@ -195,16 +206,16 @@ class Mealy extends Component {
                     <td
                         key={'x' + i}
                         className={'p-1 ' + (this.isColEqual(count, i, data)
-                        ? "small"
+                        ? "small align-middle"
                         : "crossed")}>
                         {this.isColEqual(count, i, data) && this
                             .equivalentCells(count, i, data)
                             .map((pair, index) => (
-                                <p key={index} className={'m-1 ' + (pair === 'false' && "crossed")}>
+                                <h6 key={index} className={'m-1 ' + (pair === 'false' && "crossed")}>
                                     {pair === 'false'
                                         ? '\u00A0'
                                         : pair}
-                                </p>
+                                </h6>
                             ))}
                     </td>
                 );
