@@ -22,7 +22,6 @@ class Mealy extends Component {
                 {
                     Header: 'Z/A',
                     accessor: 'inSignal',
-                    // Cell: row => 'z/a'
                     minWidth: 40
                 }, {
                     Header: 'a1',
@@ -32,7 +31,9 @@ class Mealy extends Component {
             ],
             statesArray: [],
             outputsArray: [],
-            counter: 0
+            tableCells: [],
+            triangleData: [],
+            showTriangle: false
         };
 
         this.handleChange = this
@@ -54,7 +55,7 @@ class Mealy extends Component {
             // eslint-disable-next-line
             this.state.statesArray[i][j] = event.target.value;
             this.generateTable();
-        } else  {
+        } else {
             // eslint-disable-next-line
             this.state.outputsArray[i][j] = event.target.value;
             this.generateTable();
@@ -62,7 +63,6 @@ class Mealy extends Component {
     }
 
     generateData() {
-        console.log("FORM GENERATE DATA");
         var dataStates = [];
         var dataOutputs = [];
 
@@ -81,9 +81,10 @@ class Mealy extends Component {
     }
 
     generateTable() {
-        var testData = [];
+        const testData = [];
         const testCol = [];
-        var selectStateArray = [];
+        const selectStateArray = [];
+        const testCells = [];
 
         //первая колонка
         testCol.push({Header: 'Z/A', accessor: 'inSignal', minWidth: 40});
@@ -130,17 +131,98 @@ class Mealy extends Component {
                 accessor: 'arr.' + i,
                 minWidth: 40
             });
+            testCells.push(
+                <tr key={i + 'a'}>
+                    {this.createTableRows(i + 1, testData)}
+                </tr>
+            );
         }
 
         this.setState({
             data: update(this.state.data, {$set: testData}),
-            columns: update(this.state.columns, {$set: testCol})
+            columns: update(this.state.columns, {$set: testCol}),
+            tableCells: update(this.state.tableCells, {$set: testCells})
         }, () => {
-            console.log("Data: ", this.state.data);
-            console.log("Col: ", this.state.columns);
-            console.log("States: ", this.state.statesArray);
+            // console.log("Data: ", this.state.data); console.log("Col: ",
+            // this.state.columns); console.log("States: ", this.state.statesArray);
             console.log("Outputs: ", this.state.outputsArray);
-        })
+        });
+    }
+
+    isColEqual(mainCol, compCol, data) {
+        let isEqual = true;
+
+        for (let i = 0; i < this.state.inputSignals; i++) {
+            isEqual = isEqual && data[i].arr[mainCol].props.children[1].props.value === data[i].arr[compCol].props.children[1].props.value;
+        }
+
+        return isEqual;
+    }
+
+    equivalentCells(mainCol, compCol, data) {
+        let equivPairs = [];
+
+        for (let i = 0; i < this.state.inputSignals; i++) {
+            let main = parseInt(data[i].arr[mainCol].props.children[0].props.value.substr(-1), 10) + 1;
+            let comp = parseInt(data[i].arr[compCol].props.children[0].props.value.substr(-1), 10) + 1;
+            if (!(this.isColEqual(main - 1, comp - 1, data))) {
+                equivPairs = [];
+                equivPairs[i] = 'false';
+                i++;
+            } else if (!(comp === main || (compCol + 1 === comp && mainCol + 1 === main) || (compCol + 1 === main && mainCol + 1 === comp))) {
+                equivPairs[i] = comp < main
+                    ? '(a' + comp + ', a' + main + ')'
+                    : '(a' + main + ', a' + comp + ')';
+            }
+        }
+
+        equivPairs = [...new Set(equivPairs)];
+
+        return equivPairs;
+    }
+
+    createTableRows = (count, data) => {
+        let tableRows = [];
+        // let testTriangleDate = [];
+
+        if (count < this.state.stateSet) {
+            tableRows.push(
+                <td className="font-weight-bold text-monospace p-1 align-middle" key={count}>{'a' + (count + 1)}</td>
+            );
+            for (let i = 0; i < count; i++) {
+                // testTriangleDate[i] = [];
+                tableRows.push(
+                    <td
+                        key={'x' + i}
+                        className={'p-1 ' + (this.isColEqual(count, i, data)
+                        ? "small"
+                        : "crossed")}>
+                        {this.isColEqual(count, i, data) && this
+                            .equivalentCells(count, i, data)
+                            .map((pair, index) => (
+                                <p key={index} className={'m-1 ' + (pair === 'false' && "crossed")}>
+                                    {pair === 'false'
+                                        ? '\u00A0'
+                                        : pair}
+                                </p>
+                            ))}
+                    </td>
+                );
+            }
+        } else {
+            tableRows.push(
+                <td key={count + 1}>{' '}</td>
+            );
+            for (let i = 1; i < count; i++) {
+                tableRows.push(
+                    <td className="font-weight-bold text-monospace" key={'a' + i}>{'a' + i}</td>
+                );
+            }
+        }
+
+        // console.log('Triangle data: ', testTriangleDate);
+
+        return tableRows;
     }
 
     createOptions = (rowNumber, optionName) => {
@@ -160,20 +242,21 @@ class Mealy extends Component {
                 )
             }
         }
-        console.log("OPTIONS:");
+
         return options;
     }
 
-    generateTriangleTable() {
-        for (let i = 1; i < this.state.stateSet; i++) {
-            console.log("Index: ", i);
-        }
+    showTriangleTable() {
+
+        this.setState({
+            showTriangle: !this.state.showTriangle,
+        });
     }
 
     render() {
 
         return (
-            <div className="moore-machine mt-3">
+            <div className="mealy-machine mt-3">
                 <div className="row mx-0">
                     <div className="col-4">
                         <label htmlFor="stateSet">{"State set: " + this.state.stateSet + ' (A)'}</label>
@@ -214,66 +297,20 @@ class Mealy extends Component {
                             columns={this.state.columns}
                             pageSize={this.state.data.length}
                             showPagination={false}
-                            />
+                            className="-highlight"/>
                     </div>
                     <div className="col-12 mt-3">
-                        <Button color="primary">
-                            add 'Build button' to pagination
+                        <Button color="primary" size="sm" onClick={() => this.showTriangleTable()}>
+                            Build
                         </Button>
-                    {this.generateTriangleTable()}
                     </div>
                     <div className="col-12 mt-3">
-                        <Table bordered>
-                            {/* <thead>
-                                <tr>
-                                    <th>a2</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Username</th>
-                                </tr>
-                            </thead> */}
+                        <Table bordered hover size="sm">
                             <tbody>
-                                <tr>
-                                    <td scope="row">a2</td>
-                                    <td>X</td>
-                                    {/* <td>Otto</td>
-                                    <td>@mdo</td> */}
-                                </tr>
-                                <tr>
-                                    <td scope="row">a3</td>
-                                    <td>(a2, a6)</td>
-                                    <td>X</td>
-                                    {/* <td>@mdo</td> */}
-                                </tr>
-                                <tr>
-                                    <td scope="row">a4</td>
-                                    <td>X</td>
-                                    <td>X</td>
-                                    <td>X</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">a5</td>
-                                    <td>X</td>
-                                    <td>(a2, a6), (a5, a6)</td>
-                                    <td>X</td>
-                                    <td>X</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">a6</td>
-                                    <td>X</td>
-                                    <td>(a2, a5)</td>
-                                    <td>X</td>
-                                    <td>X</td>
-                                    <td>(a2, a5)</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>a1</td>
-                                    <td>a2</td>
-                                    <td>a3</td>
-                                    <td>a4</td>
-                                    <td>a5</td>
-                                </tr>
+                                {this.state.showTriangle && this
+                                    .state
+                                    .tableCells
+                                    .map((list) => list)}
                             </tbody>
                         </Table>
                     </div>
