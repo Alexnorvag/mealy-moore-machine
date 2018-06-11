@@ -43,7 +43,7 @@ class Homepage extends Component {
                         </Link>
                     </div>
                     <div className="col-5 d-flex justify-content-center">
-                        <Link to={'/mealy'} className="link-decoration">
+                        <Link to={'mealy'} className="link-decoration">
                             <div className="card card-item border-0 bg-transparent">
                                 <img
                                     className="card-image"
