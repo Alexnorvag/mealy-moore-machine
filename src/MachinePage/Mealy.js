@@ -276,7 +276,7 @@ class Mealy extends Component {
             <div className="mealy-machine mt-3">
                 <div className="row mx-0">
                     <div className="col-4">
-                        <label htmlFor="stateSet">{"Statef set: " + this.state.stateSet + ' (A)'}</label>
+                        <label htmlFor="stateSet">{"State set: " + this.state.stateSet + ' (A)'}</label>
                         <input
                             type="range"
                             className="custom-range"
