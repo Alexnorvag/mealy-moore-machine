@@ -1,5 +1,6 @@
 {
   "name": "mealy-moore-machine",
+  "homepage": "https://alexnorvag.github.io/mealy-moore-machine/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -60,6 +61,7 @@
     "test": "node scripts/test.js --env=jsdom"
   },
   "devDependencies": {
+    "gh-pages": "^1.2.0",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1"
   },

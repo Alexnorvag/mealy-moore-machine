@@ -131,6 +131,7 @@ class Mealy extends Component {
                 accessor: 'arr.' + i,
                 minWidth: 40
             });
+            console.log("ROW");
             testCells.push(
                 <tr key={i + 'a'}>
                     {this.createTableRows(i + 1, testData)}
@@ -143,8 +144,9 @@ class Mealy extends Component {
             columns: update(this.state.columns, {$set: testCol}),
             tableCells: update(this.state.tableCells, {$set: testCells})
         }, () => {
-            // console.log("Data: ", this.state.data); console.log("Col: ",
-            // this.state.columns); console.log("States: ", this.state.statesArray);
+            // console.log("Data: ", this.state.data); 
+            // console.log("Col: ", this.state.columns); 
+            // console.log("States: ", this.state.statesArray);
             // console.log("Outputs: ", this.state.outputsArray);
         });
     }
@@ -161,7 +163,6 @@ class Mealy extends Component {
 
     equivalentCells(mainCol, compCol, data) {
         let equivPairs = [];
-        // let testTriangleData = [];
 
         for (let i = 0; i < this.state.inputSignals; i++) {
             let main = parseInt(data[i].arr[mainCol].props.children[0].props.value.substr(-1), 10) + 1;
@@ -175,11 +176,6 @@ class Mealy extends Component {
                     ? '(a' + comp + ', a' + main + ')'
                     : '(a' + main + ', a' + comp + ')';
             }
-            // else {
-            //     equivPairs[i] = 'empty';
-            //     break;
-            // }
-            // testTriangleData[i] = equivPairs;
         }
 
         equivPairs = [...new Set(equivPairs)];
@@ -187,21 +183,26 @@ class Mealy extends Component {
             equivPairs.push('\u2205');
         }
 
-        console.log("Triangle data: ", equivPairs);
+        console.log("Equiv Array: ", equivPairs);
 
         return equivPairs;
     }
 
     createTableRows = (count, data) => {
         let tableRows = [];
-        // let testTriangleDate = [];
+        let testTriangleDate = [];
 
         if (count < this.state.stateSet) {
             tableRows.push(
                 <td className="font-weight-bold text-monospace p-1 align-middle" key={count}>{'a' + (count + 1)}</td>
             );
             for (let i = 0; i < count; i++) {
-                // testTriangleDate[i] = [];
+                if (this.isColEqual(count, i, data)) {
+                    testTriangleDate[i] = this.equivalentCells(count, i, data);
+                } else {
+                    testTriangleDate[i] = false;
+                }
+                console.log("TEST");
                 tableRows.push(
                     <td
                         key={'x' + i}
@@ -231,7 +232,12 @@ class Mealy extends Component {
             }
         }
 
-        // console.log('Triangle data: ', testTriangleDate);
+        this.setState({
+            triangleData: update(this.state.triangleData, {$push: testTriangleDate})
+        }, () => {
+            console.log("Triangle data full: ", this.state.triangleData)
+        })
+        console.log('Triangle data: ', testTriangleDate);
 
         return tableRows;
     }
