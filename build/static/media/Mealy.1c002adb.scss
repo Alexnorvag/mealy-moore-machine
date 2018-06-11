@@ -1,0 +1,52 @@
+.select-style {
+    border-radius: 10px;
+    border-color: rgba(255, 255, 255, 0);
+    background-color: #ffffff00;
+}
+
+.mealy-machine {
+    table {
+        tr {
+            td {
+                &.crossed {
+                    position: relative;
+                    &:before,
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        background-color: #f88045;
+                        width: 2px;
+                        height: 30px;
+                    }
+                    &:before {
+                        transform: translate(-50%, -50%) rotate(-45deg);
+                    }
+                    &:after {
+                        transform: translate(-50%, -50%) rotate(45deg);
+                    }
+                }
+                .crossed {
+                    position: relative;
+                    &:before,
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        background-color: #f88045;
+                        width: 2px;
+                        height: 30px;
+                    }
+                    &:before {
+                        transform: translate(-50%, -50%) rotate(-45deg);
+                    }
+                    &:after {
+                        transform: translate(-50%, -50%) rotate(45deg);
+                    }
+                }
+            }
+        }
+    }
+}
