@@ -131,7 +131,7 @@ class Mealy extends Component {
                 accessor: 'arr.' + i,
                 minWidth: 40
             });
-            console.log("ROW");
+            // console.log("ROW"); console.log("TRIANGLE DATA: ", this.state.triangleData);
             testCells.push(
                 <tr key={i + 'a'}>
                     {this.createTableRows(i + 1, testData)}
@@ -144,9 +144,8 @@ class Mealy extends Component {
             columns: update(this.state.columns, {$set: testCol}),
             tableCells: update(this.state.tableCells, {$set: testCells})
         }, () => {
-            // console.log("Data: ", this.state.data); 
-            // console.log("Col: ", this.state.columns); 
-            // console.log("States: ", this.state.statesArray);
+            // console.log("Data: ", this.state.data); console.log("Col: ",
+            // this.state.columns); console.log("States: ", this.state.statesArray);
             // console.log("Outputs: ", this.state.outputsArray);
         });
     }
@@ -183,26 +182,30 @@ class Mealy extends Component {
             equivPairs.push('\u2205');
         }
 
-        console.log("Equiv Array: ", equivPairs);
+        const index = equivPairs.indexOf(undefined);
+        if (index !== -1) {
+            equivPairs.splice(index, 1);
+        }
 
         return equivPairs;
     }
 
     createTableRows = (count, data) => {
         let tableRows = [];
-        let testTriangleDate = [];
+        let testTriangleData = [];
 
         if (count < this.state.stateSet) {
             tableRows.push(
                 <td className="font-weight-bold text-monospace p-1 align-middle" key={count}>{'a' + (count + 1)}</td>
             );
             for (let i = 0; i < count; i++) {
+
                 if (this.isColEqual(count, i, data)) {
-                    testTriangleDate[i] = this.equivalentCells(count, i, data);
+                    testTriangleData[i] = this.equivalentCells(count, i, data);
                 } else {
-                    testTriangleDate[i] = false;
+                    testTriangleData[i] = "false";
                 }
-                console.log("TEST");
+
                 tableRows.push(
                     <td
                         key={'x' + i}
@@ -221,6 +224,8 @@ class Mealy extends Component {
                     </td>
                 );
             }
+            // eslint-disable-next-line
+            this.state.triangleData[count] = testTriangleData;
         } else {
             tableRows.push(
                 <td key={count + 1}>{' '}</td>
@@ -232,12 +237,10 @@ class Mealy extends Component {
             }
         }
 
-        this.setState({
-            triangleData: update(this.state.triangleData, {$push: testTriangleDate})
-        }, () => {
-            console.log("Triangle data full: ", this.state.triangleData)
-        })
-        console.log('Triangle data: ', testTriangleDate);
+        this
+            .state
+            .triangleData
+            .splice(this.state.stateSet);
 
         return tableRows;
     }
@@ -266,8 +269,77 @@ class Mealy extends Component {
     showTriangleTable() {
 
         this.setState({
-            showTriangle: !this.state.showTriangle,
+            showTriangle: !this.state.showTriangle
         });
+    }
+
+    areEqual(startPos, array, numF, numS) {
+        for (let i = startPos; i < array.length; i++) {
+            for (let j = 0; j < array[i].length; j++) {
+                if (array[i][j][0] === numF && array[i][j][1] === numS) {
+                    return i + ',' + j
+                }
+            }
+        }
+    }
+
+    equivalentSystem() {
+        // let statesA = [];
+        let testStatesA = [];
+        let testStates = [];
+
+        // for (let i = 1; i <= this.state.triangleData.length; i++) {
+        //     statesA[i] = [];
+        //     for (let j = 1; j <= this.state.triangleData.length && i <= 1; j++) {
+        //         statesA[i][j] = "a" + j;
+        //     }
+        // }
+
+        for (let i = 0; i < this.state.triangleData.length; i++) {
+            testStates[i] = [];
+            for (let j = i + 1; j < this.state.triangleData.length; j++) {
+                if (this.state.triangleData[j][i] === "false" || this.state.triangleData[j][i].toString() === "false") {
+                    console.log("False[" + j + "][" + i + "] = ", this.state.triangleData[j][i]);
+                    // statesA[i + 2].push(statesA[i + 1][j + 1]);
+                } else {
+                    console.log("Arr[" + j + "][" + i + "] = ", this.state.triangleData[j][i]);
+                    testStates[i].push([
+                        'a' + (i + 1),
+                        'a' + (j + 1)
+                    ]);
+                }
+            }
+        }
+
+        testStates = testStates.filter(element => element.length > 0);
+
+        for (let i = 0; i < testStates.length; i++) {
+            testStatesA[i] = testStates[i];
+            for (let j = 0; j < testStatesA[i].length; j++) {
+                for (let k = j + 1; k < testStatesA[i].length; k++) {
+                    if (testStates[i][j][0] === testStates[i][k][0]) {
+                        if (!(this.areEqual(i + 1, testStates, testStates[i][j][1], testStates[i][k][1]) === undefined)) {
+                            let arr = this.areEqual(i + 1, testStates, testStates[i][j][1], testStates[i][k][1])
+                                .split(',')
+                                .map(Number);
+                                console.log("TESTARR1: ", testStates[arr[0]]);
+                            testStates.splice(arr[0], 1);
+                            
+                            console.log("STRING: " + arr + ": " + arr[0] + ", " + arr[1]);
+                            console.log("TESTARR: ", testStates[arr[0]]);
+                            testStates.splice(arr[0], 1);
+                        }
+                        testStatesA[i][j].push(testStates[i][k][0], testStates[i][k][1]);
+                        testStatesA[i].splice(k, 1);
+                        testStatesA[i][j] = [...new Set(testStatesA[i][j])];
+                    }
+                }
+            }
+        }
+
+        // console.log("StatesA: ", statesA);
+        console.log("TESTA: ", testStatesA);
+        console.log("TEST: ", testStates);
     }
 
     render() {
@@ -330,6 +402,10 @@ class Mealy extends Component {
                                     .map((list) => list)}
                             </tbody>
                         </Table>
+                    </div>
+                    <div className="col-12 mt-3">
+                        {this.equivalentSystem()}
+                        {this.state.showTriangle && <h4>A</h4>}
                     </div>
                 </div>
             </div>
