@@ -283,24 +283,15 @@ class Mealy extends Component {
         }
     }
 
-    equivalentSystem() {
-        // let statesA = [];
+    equivalentSystem() {;
         let testStatesA = [];
         let testStates = [];
-
-        // for (let i = 1; i <= this.state.triangleData.length; i++) {
-        //     statesA[i] = [];
-        //     for (let j = 1; j <= this.state.triangleData.length && i <= 1; j++) {
-        //         statesA[i][j] = "a" + j;
-        //     }
-        // }
 
         for (let i = 0; i < this.state.triangleData.length; i++) {
             testStates[i] = [];
             for (let j = i + 1; j < this.state.triangleData.length; j++) {
                 if (this.state.triangleData[j][i] === "false" || this.state.triangleData[j][i].toString() === "false") {
                     console.log("False[" + j + "][" + i + "] = ", this.state.triangleData[j][i]);
-                    // statesA[i + 2].push(statesA[i + 1][j + 1]);
                 } else {
                     console.log("Arr[" + j + "][" + i + "] = ", this.state.triangleData[j][i]);
                     testStates[i].push([
@@ -322,11 +313,7 @@ class Mealy extends Component {
                             let arr = this.areEqual(i + 1, testStates, testStates[i][j][1], testStates[i][k][1])
                                 .split(',')
                                 .map(Number);
-                                console.log("TESTARR1: ", testStates[arr[0]]);
                             testStates.splice(arr[0], 1);
-                            
-                            console.log("STRING: " + arr + ": " + arr[0] + ", " + arr[1]);
-                            console.log("TESTARR: ", testStates[arr[0]]);
                             testStates.splice(arr[0], 1);
                         }
                         testStatesA[i][j].push(testStates[i][k][0], testStates[i][k][1]);
@@ -337,7 +324,6 @@ class Mealy extends Component {
             }
         }
 
-        // console.log("StatesA: ", statesA);
         console.log("TESTA: ", testStatesA);
         console.log("TEST: ", testStates);
     }
