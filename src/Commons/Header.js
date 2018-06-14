@@ -58,7 +58,7 @@ class Header extends Component {
 
                     <div className="col-4 d-flex justify-content-end">
                         <div className="btn-group">
-                            <button type="button" className="btn btn-primary">Sasha Ignatenya</button>
+                            <button type="button" className="btn btn-primary">Alexandra Ignatenya</button>
                             <button
                                 type="button"
                                 className="btn btn-primary dropdown-toggle dropdown-toggle-split"
