@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Route, Link, withRouter} from 'react-router-dom';// eslint-disable-line no-unused-vars
+import {BrowserRouter as Router, Route, Link, withRouter} from 'react-router-dom'; // eslint-disable-line no-unused-vars
 import './Homepage.scss';
 
 class Homepage extends Component {
@@ -20,10 +20,9 @@ class Homepage extends Component {
                                 <h2 className="card-title">Moore and Mealy Machines</h2>
                                 <p className="card-text font-italic">Description for both machines
                                 </p>
-                                <p className="card-text text-monospace">Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Similique possimus aliquam nulla eos, optio nisi, impedit
-                                    explicabo laborum maiores aliquid accusantium blanditiis quae placeat ratione
-                                    sint perferendis alias error vitae!</p>
+                                <p className="card-text text-monospace">The mathematical model of the "abstract
+                                    machine" was introduced in 1955 by George Mealy (1927 - 2010) and in 1956 by
+                                    Edward Forest Moore (Moor E.F., 1925 - 2003).</p>
                             </div>
                         </div>
                     </div>

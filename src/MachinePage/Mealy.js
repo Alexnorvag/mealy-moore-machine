@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ReactTable from "react-table";
 import update from 'immutability-helper';
-import {Table, Button} from 'reactstrap';
+import {Table, Button, ListGroup, ListGroupItem} from 'reactstrap';
 
 import './Mealy.scss';
 
@@ -33,6 +33,7 @@ class Mealy extends Component {
             outputsArray: [],
             tableCells: [],
             triangleData: [],
+            equivalentStates: [],
             showTriangle: false
         };
 
@@ -131,7 +132,6 @@ class Mealy extends Component {
                 accessor: 'arr.' + i,
                 minWidth: 40
             });
-            // console.log("ROW"); console.log("TRIANGLE DATA: ", this.state.triangleData);
             testCells.push(
                 <tr key={i + 'a'}>
                     {this.createTableRows(i + 1, testData)}
@@ -286,14 +286,13 @@ class Mealy extends Component {
     equivalentSystem() {;
         let testStatesA = [];
         let testStates = [];
+        let exmplA = [];
 
         for (let i = 0; i < this.state.triangleData.length; i++) {
             testStates[i] = [];
+            exmplA.push("a" + (i + 1));
             for (let j = i + 1; j < this.state.triangleData.length; j++) {
-                if (this.state.triangleData[j][i] === "false" || this.state.triangleData[j][i].toString() === "false") {
-                    console.log("False[" + j + "][" + i + "] = ", this.state.triangleData[j][i]);
-                } else {
-                    console.log("Arr[" + j + "][" + i + "] = ", this.state.triangleData[j][i]);
+                if (!(this.state.triangleData[j][i] === "false" || this.state.triangleData[j][i].toString() === "false")) {
                     testStates[i].push([
                         'a' + (i + 1),
                         'a' + (j + 1)
@@ -324,8 +323,61 @@ class Mealy extends Component {
             }
         }
 
-        console.log("TESTA: ", testStatesA);
-        console.log("TEST: ", testStates);
+        for (let i = 0; i < testStatesA.length; i++) {
+            for (let j = 0; j < testStatesA[i].length; j++) {
+                for (let k = 0; k < testStatesA[i][j].length; k++) {
+                    exmplA.splice(exmplA.indexOf(testStatesA[i][j][k]), 1);
+                }
+            }
+        }
+
+        exmplA.every(el => testStatesA.push([
+            [el]
+        ]));
+        // eslint-disable-next-line
+        this.state.equivalentStates = testStatesA;
+
+        return testStatesA;
+    }
+
+    minimizedTable() {
+        let tableRows = [];
+        let headOptions = [];
+        let bodyOptions = [];
+
+        for (let i = 0; i < this.state.equivalentStates.length; i++) {
+            headOptions.push(
+                <th key={"b" + i}>{"b" + (i + 1)}</th>
+            );
+        }
+
+        for (let i = 0; i < this.state.inputSignals; i++) {
+            bodyOptions[i] = [];
+            for (let j = 0; j < this.state.equivalentStates.length; j++) {
+
+                bodyOptions[i][j] = (
+                    <td key={"el" + i + j}>{"b" + (this.state.equivalentStates.map((el) => el.map((val) => val.indexOf('a' + (parseInt(this.state.statesArray[i][(this.state.equivalentStates[j][0][0].substring(1) - 1)].substring(12), 10) + 1)))).findIndex(c => c >= 0) + 1) + "/w" + (parseInt(this.state.outputsArray[i][(this.state.equivalentStates[j][0][0].substring(1) - 1)].substring(13), 10) + 1)}</td>
+                );
+            }
+        }
+
+        tableRows.push(
+            <tr className="font-weight-bold text-monospace p-1 align-middle" key={"head1"}>
+                <th>Z\A</th>
+                {headOptions.map((el) => el)}
+            </tr>
+        );
+
+        for (let i = 0, j = 0; i < this.state.inputSignals && j < bodyOptions.length; i++, j++) {
+            tableRows.push(
+                <tr key={"minBody" + i}>
+                    <th scope="row" className="font-weight-bold text-monospace p-1 align-middle">{"z" + (i + 1)}</th>
+                    {bodyOptions[j].map((el) => el)}
+                </tr>
+            );
+        }
+
+        return tableRows;
     }
 
     render() {
@@ -389,10 +441,20 @@ class Mealy extends Component {
                             </tbody>
                         </Table>
                     </div>
-                    <div className="col-12 mt-3">
-                        {this.equivalentSystem()}
-                        {this.state.showTriangle && <h4>A</h4>}
-                    </div>
+                    {this.state.showTriangle && <div className="col-4 mt-3">
+                        <ListGroup>
+                            {this
+                                .equivalentSystem()
+                                .map((state, index) => <ListGroupItem key={index} color="info" className="text-left">{"A" + (index + 1) + " = {" + state + "} = b" + (index + 1)}</ListGroupItem>)}
+                        </ListGroup>
+                    </div>}
+                    {this.state.showTriangle && <div className="col-8 mt-3">
+                        <Table bordered hover size="sm">
+                            <tbody>
+                                {this.minimizedTable()}
+                            </tbody>
+                        </Table>
+                    </div>}
                 </div>
             </div>
         );
